@@ -575,17 +575,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </button>
                   </div>
                 ) : (
-                  <label className="cursor-pointer block">
+                  <label className="cursor-pointer block w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center space-x-2">
                     <input 
                       type="file" 
                       className="hidden"
                       accept="image/*"
                       onChange={handleImageUpload}
                     />
-                    <button type="button" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center space-x-2">
-                      <span>📷</span>
-                      <span>上传图片</span>
-                    </button>
+                    <span>📷</span>
+                    <span>上传图片</span>
                   </label>
                 )}
                 

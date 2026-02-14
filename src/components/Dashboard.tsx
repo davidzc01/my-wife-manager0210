@@ -67,6 +67,7 @@ const Dashboard: React.FC = () => {
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [cycleStatus, setCycleStatus] = useState<{ status: string; color: string }>({ status: '未知', color: 'gray' });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const { setShowSexModal, setShowWishModal, setShowAddObservationModal } = useModal();
 
@@ -390,11 +391,14 @@ const Dashboard: React.FC = () => {
                         {/* 状态宝石 */}
                         <div className="relative group z-10">
                           {/* 宝石中心 - 只用不同颜色的心形emoji */}
-                          <div className="text-3xl animate-pulse">
+                          <button 
+                            onClick={() => setShowTooltip(!showTooltip)}
+                            className="text-3xl animate-pulse focus:outline-none"
+                          >
                             {cycleStatus.color === 'red' ? '❤️' : cycleStatus.color === 'green' ? '💚' : cycleStatus.color === 'yellow' ? '💛' : '🤍'}
-                          </div>
+                          </button>
                           {/* ToolTip */}
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-500" style={{ minWidth: '150px' }}>
+                          <div className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg transition-all duration-300 whitespace-nowrap z-500 ${(showTooltip || window.innerWidth >= 768) ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover:opacity-100 group-hover:visible`} style={{ minWidth: '150px' }}>
                             {cycleStatus.color === 'red' ? '生理期，需要更多关爱' : 
                              cycleStatus.color === 'green' ? `安全期，充满活力\n距上次亲密：${getDaysSinceLastSex()}` : 
                              cycleStatus.color === 'yellow' ? `黄体期，情绪或有波动\n距上次亲密：${getDaysSinceLastSex()}` : 
