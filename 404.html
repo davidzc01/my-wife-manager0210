@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到</title>
+    <script>
+        // 重定向到应用根路径，让客户端路由处理路径
+        (function() {
+            const basePath = '/my-wife-manager0210/';
+            let path = window.location.pathname;
+            
+            // 构建重定向 URL，保留原始路径
+            const redirectUrl = basePath + path.replace(/^\//, '');
+            console.log('Redirecting to:', redirectUrl);
+            window.location.href = redirectUrl;
+        })();
+    </script>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif;">
+        <h1>404 - 页面未找到</h1>
+        <p>正在重定向到应用首页...</p>
+    </div>
+</body>
+</html>
