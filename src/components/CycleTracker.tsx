@@ -11,6 +11,7 @@ interface SexRecord {
   ejaculation: boolean;
   ejaculationLocation?: string;
   notes?: string;
+  feelings?: string;
 }
 
 interface CycleData {
@@ -124,6 +125,62 @@ const CycleTracker: React.FC = () => {
     }));
     saveCycleData({ ...cycleData, sexRecords: updatedRecords });
     setSuccess('做爱记录已删除！');
+  };
+  
+  // 编辑做爱记录状态
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<{
+    id: string;
+    location: string;
+    position: string;
+    ejaculation: boolean;
+    ejaculationLocation: string;
+    feelings: string;
+  }>({ 
+    id: '', 
+    location: '', 
+    position: '', 
+    ejaculation: false, 
+    ejaculationLocation: '',
+    feelings: '' 
+  });
+  
+  // 开始编辑做爱记录
+  const startEditSexRecord = (record: SexRecord) => {
+    setEditingRecord({
+      id: record.id,
+      location: record.location || '',
+      position: record.position || '',
+      ejaculation: record.ejaculation,
+      ejaculationLocation: record.ejaculationLocation || '',
+      feelings: record.feelings || ''
+    });
+    setIsEditing(true);
+  };
+  
+  // 保存编辑的做爱记录
+  const saveEditedSexRecord = () => {
+    const updatedRecords = cycleData.sexRecords.map(record => {
+      if (record.id === editingRecord.id) {
+        return {
+          ...record,
+          location: editingRecord.location,
+          position: editingRecord.position,
+          ejaculation: editingRecord.ejaculation,
+          ejaculationLocation: editingRecord.ejaculation ? editingRecord.ejaculationLocation : undefined,
+          feelings: editingRecord.feelings || undefined
+        };
+      }
+      return record;
+    });
+    
+    setCycleData(prev => ({
+      ...prev,
+      sexRecords: updatedRecords,
+    }));
+    saveCycleData({ ...cycleData, sexRecords: updatedRecords });
+    setSuccess('做爱记录已更新！');
+    setIsEditing(false);
   };
 
   // 计算距上次做爱时间
@@ -310,11 +367,20 @@ const CycleTracker: React.FC = () => {
                             <span className="text-gray-400">射精位置: {record.ejaculationLocation}</span>
                           )}
                         </div>
+                        {record.feelings && (
+                          <p className="text-gray-400 text-sm mt-1">感受: {record.feelings}</p>
+                        )}
                         {record.notes && (
                           <p className="text-gray-400 text-sm mt-1">{record.notes}</p>
                         )}
                       </div>
-                      <div className="md:w-1/3 flex justify-end mt-4 md:mt-0">
+                      <div className="md:w-1/3 flex justify-end gap-3 mt-4 md:mt-0">
+                        <button
+                          onClick={() => startEditSexRecord(record)}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out"
+                        >
+                          编辑
+                        </button>
                         <button
                           onClick={() => deleteSexRecord(record.id)}
                           className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out"
@@ -329,6 +395,96 @@ const CycleTracker: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* 编辑做爱记录模态框 */}
+      {isEditing && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-500 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl shadow-2xl border border-purple-800 p-8 max-w-2xl w-full">
+            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">编辑做爱记录</h3>
+            
+            <div className="space-y-6">
+              {/* 地点 */}
+              <div>
+                <h4 className="text-sm text-gray-400 mb-2">地点</h4>
+                <input
+                  type="text"
+                  placeholder="例如：卧室、客厅、酒店等"
+                  value={editingRecord.location}
+                  onChange={(e) => setEditingRecord(prev => ({ ...prev, location: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-lg border border-purple-700/50 bg-gray-800/80 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                />
+              </div>
+              
+              {/* 姿势 */}
+              <div>
+                <h4 className="text-sm text-gray-400 mb-2">姿势</h4>
+                <input
+                  type="text"
+                  placeholder="例如：传教士、女上位、后入等"
+                  value={editingRecord.position}
+                  onChange={(e) => setEditingRecord(prev => ({ ...prev, position: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-lg border border-purple-700/50 bg-gray-800/80 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                />
+              </div>
+              
+              {/* 是否射精 */}
+              <div>
+                <h4 className="text-sm text-gray-400 mb-2">是否射精</h4>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={editingRecord.ejaculation}
+                    onChange={(e) => setEditingRecord(prev => ({ ...prev, ejaculation: e.target.checked }))}
+                    className="w-5 h-5 text-pink-500 border-gray-600 rounded focus:ring-pink-500"
+                  />
+                  <span className="ml-3 text-white">是</span>
+                </div>
+              </div>
+              
+              {/* 射精部位 */}
+              {editingRecord.ejaculation && (
+                <div>
+                  <h4 className="text-sm text-gray-400 mb-2">射精部位</h4>
+                  <input
+                    type="text"
+                    placeholder="例如：体内、体外、口中、乳中等"
+                    value={editingRecord.ejaculationLocation}
+                    onChange={(e) => setEditingRecord(prev => ({ ...prev, ejaculationLocation: e.target.value }))}
+                    className="w-full px-4 py-3 rounded-lg border border-purple-700/50 bg-gray-800/80 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  />
+                </div>
+              )}
+              
+              {/* 感受 */}
+              <div>
+                <h4 className="text-sm text-gray-400 mb-2">感受</h4>
+                <textarea
+                  placeholder="例如：很愉快、很满足、很刺激等"
+                  value={editingRecord.feelings}
+                  onChange={(e) => setEditingRecord(prev => ({ ...prev, feelings: e.target.value }))}
+                  className="w-full h-24 px-4 py-3 rounded-lg border border-purple-700/50 bg-gray-800/80 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                />
+              </div>
+            </div>
+            
+            {/* 按钮 */}
+            <div className="flex gap-4 mt-8">
+              <button 
+                onClick={() => setIsEditing(false)}
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out"
+              >
+                取消
+              </button>
+              <button 
+                onClick={saveEditedSexRecord}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out"
+              >
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };
