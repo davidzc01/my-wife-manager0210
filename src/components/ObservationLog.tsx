@@ -24,7 +24,8 @@ const ObservationLog: React.FC = () => {
     mood: string;
     content: string;
     date: string;
-  }>({ mood: '', content: '', date: '' });
+    images: string[];
+  }>({ mood: '', content: '', date: '', images: [] });
 
   // 加载数据
   useEffect(() => {
@@ -101,7 +102,8 @@ const ObservationLog: React.FC = () => {
     setEditForm({
       mood: observation.mood,
       content: observation.content,
-      date: observation.date
+      date: observation.date,
+      images: observation.images || []
     });
     setShowEditModal(true);
   };
@@ -112,6 +114,34 @@ const ObservationLog: React.FC = () => {
     setEditForm(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+  
+  // 处理照片上传
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result;
+          if (result) {
+            setEditForm(prev => ({
+              ...prev,
+              images: [...prev.images, result as string]
+            }));
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+  
+  // 处理照片删除
+  const handleImageDelete = (index: number) => {
+    setEditForm(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
     }));
   };
 
@@ -125,7 +155,8 @@ const ObservationLog: React.FC = () => {
           ...obs,
           mood: editForm.mood,
           content: editForm.content,
-          date: editForm.date
+          date: editForm.date,
+          images: editForm.images.length > 0 ? editForm.images : undefined
         } : obs
       );
 
@@ -406,6 +437,46 @@ const ObservationLog: React.FC = () => {
                   placeholder="记录下你观察到的细节..."
                   required
                 />
+              </div>
+
+              {/* 照片管理 */}
+              <div>
+                <label className="block text-gray-400 mb-2">照片</label>
+                
+                {/* 已上传照片 */}
+                {editForm.images.length > 0 && (
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    {editForm.images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img 
+                          src={image} 
+                          alt={`Photo ${index + 1}`}
+                          className="w-full h-24 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleImageDelete(index)}
+                          className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* 上传照片按钮 */}
+                <label className="cursor-pointer block w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center space-x-2">
+                  <input 
+                    type="file" 
+                    className="hidden"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                  />
+                  <span>📷</span>
+                  <span>{editForm.images.length > 0 ? '添加更多照片' : '上传照片'}</span>
+                </label>
               </div>
 
               {/* 按钮组 */}
