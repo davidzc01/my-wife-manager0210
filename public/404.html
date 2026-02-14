@@ -6,7 +6,20 @@
     <title>页面未找到</title>
     <script>
         // 重定向到 index.html，让客户端路由处理路径
-        window.location.href = '/my-wife-manager0210/' + window.location.pathname.replace('/my-wife-manager0210/', '');
+        (function() {
+            const basePath = '/my-wife-manager0210/';
+            let path = window.location.pathname;
+            
+            // 移除基础路径前缀（如果存在）
+            if (path.startsWith(basePath)) {
+                path = path.substring(basePath.length);
+            }
+            
+            // 构建重定向 URL
+            const redirectUrl = basePath + (path || '');
+            console.log('Redirecting to:', redirectUrl);
+            window.location.href = redirectUrl;
+        })();
     </script>
 </head>
 <body>
