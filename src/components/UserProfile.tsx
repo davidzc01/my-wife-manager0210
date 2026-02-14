@@ -39,13 +39,6 @@ const UserProfile: React.FC = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // 检查文件大小（2MB限制）
-      const maxSize = 2 * 1024 * 1024; // 2MB
-      if (file.size > maxSize) {
-        setError('头像文件大小不能超过2MB');
-        return;
-      }
-
       // 使用Canvas压缩图片
       const compressImage = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {

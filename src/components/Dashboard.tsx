@@ -71,7 +71,7 @@ const Dashboard: React.FC = () => {
   const { setShowSexModal, setShowWishModal, setShowAddObservationModal } = useModal();
 
   // 加载数据
-  useEffect(() => {
+  const loadDashboardData = () => {
     const data = loadData();
     if (data) {
       setWifeData(data.wife || null);
@@ -79,6 +79,17 @@ const Dashboard: React.FC = () => {
       setImages(data.images || []);
       setWishlist(data.wishlist || []);
     }
+  };
+
+  // 初始加载数据
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  // 每30秒自动刷新数据，确保数据同步
+  useEffect(() => {
+    const interval = setInterval(loadDashboardData, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // 计算生理周期状态
