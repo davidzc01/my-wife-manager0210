@@ -2,13 +2,13 @@
   "name": "老婆管理器",
   "short_name": "老婆管理器",
   "description": "一个功能强大的老婆管理应用",
-  "start_url": "/",
+  "start_url": "/my-wife-manager0210/",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#8B5CF6",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "/my-wife-manager0210/favicon.ico",
       "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
       "type": "image/x-icon"
     }
@@ -21,15 +21,15 @@
       "name": "老婆档案",
       "short_name": "档案",
       "description": "查看老婆档案",
-      "url": "/wife",
-      "icons": [{ "src": "favicon.ico", "sizes": "192x192" }]
+      "url": "/my-wife-manager0210/wife",
+      "icons": [{ "src": "/my-wife-manager0210/favicon.ico", "sizes": "192x192" }]
     },
     {
       "name": "图片画廊",
       "short_name": "画廊",
       "description": "查看图片画廊",
-      "url": "/gallery",
-      "icons": [{ "src": "favicon.ico", "sizes": "192x192" }]
+      "url": "/my-wife-manager0210/gallery",
+      "icons": [{ "src": "/my-wife-manager0210/favicon.ico", "sizes": "192x192" }]
     }
   ]
 }

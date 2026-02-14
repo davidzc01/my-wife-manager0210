@@ -3,10 +3,10 @@ const CACHE_NAME = 'my-wife-manager-v1';
 
 // 需要缓存的资源
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico'
+  '/my-wife-manager0210/',
+  '/my-wife-manager0210/index.html',
+  '/my-wife-manager0210/manifest.json',
+  '/my-wife-manager0210/favicon.ico'
 ];
 
 // 安装事件 - 预缓存静态资源
@@ -70,7 +70,7 @@ self.addEventListener('fetch', (event) => {
           .catch(() => {
             // 如果网络请求失败，返回离线页面
             if (event.request.mode === 'navigate') {
-              return caches.match('/');
+              return caches.match('/my-wife-manager0210/');
             }
           });
       })
@@ -96,8 +96,8 @@ self.addEventListener('push', (event) => {
   const data = event.data.json();
   const options = {
     body: data.body,
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
+    icon: '/my-wife-manager0210/favicon.ico',
+    badge: '/my-wife-manager0210/favicon.ico',
     vibrate: [100, 50, 100],
     data: {
       url: data.url
