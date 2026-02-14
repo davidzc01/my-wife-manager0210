@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ExpenseTracker from './ExpenseTracker';
 import { saveExpenseData, loadData } from '../services/storage';
-import Layout from './Layout';
+
 
 // 模拟依赖
 jest.mock('./Layout', () => ({

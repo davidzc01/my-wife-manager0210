@@ -347,10 +347,7 @@ const ExpenseTracker: React.FC = () => {
     return getFilteredExpenses().reduce((total, expense) => total + expense.price, 0);
   };
 
-  // 计算愿望单总价值
-  const calculateWishlistTotal = () => {
-    return expenseData.wishlist.reduce((total, item) => total + item.price, 0);
-  };
+
 
   return (
     <Layout>

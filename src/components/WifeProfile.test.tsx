@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import WifeProfile from './WifeProfile';
-import { saveWifeData, saveCycleData, loadData, saveImages } from '../services/storage';
-import Layout from './Layout';
+import { saveWifeData, saveCycleData, loadData } from '../services/storage';
+
 
 // 模拟依赖
 jest.mock('./Layout', () => ({
@@ -21,7 +21,7 @@ jest.mock('../services/storage', () => ({
 const mockSaveWifeData = saveWifeData as jest.MockedFunction<typeof saveWifeData>;
 const mockSaveCycleData = saveCycleData as jest.MockedFunction<typeof saveCycleData>;
 const mockLoadData = loadData as jest.MockedFunction<typeof loadData>;
-const mockSaveImages = saveImages as jest.MockedFunction<typeof saveImages>;
+
 
 describe('WifeProfile Component', () => {
   beforeEach(() => {

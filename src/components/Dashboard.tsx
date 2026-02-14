@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useModal } from '../contexts/ModalContext';
-import { loadData, saveCycleData, saveObservation, saveImages, saveExpenseData } from '../services/storage';
+import { loadData } from '../services/storage';
 import Layout from './Layout';
 
 interface WifeData {
@@ -55,13 +55,7 @@ interface WishlistItem {
   notes?: string;
 }
 
-interface Observation {
-  id: string;
-  date: string;
-  mood: string;
-  content: string;
-  images?: string[];
-}
+
 
 
 
@@ -71,7 +65,6 @@ const Dashboard: React.FC = () => {
   const [cycleData, setCycleData] = useState<CycleData | null>(null);
   const [images, setImages] = useState<Image[]>([]);
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-  const [observations, setObservations] = useState<Observation[]>([]);
   const [cycleStatus, setCycleStatus] = useState<{ status: string; color: string }>({ status: '未知', color: 'gray' });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -84,8 +77,7 @@ const Dashboard: React.FC = () => {
       setWifeData(data.wife || null);
       setCycleData(data.cycle || null);
       setImages(data.images || []);
-      setWishlist(data.expenses?.wishlist || []);
-      setObservations(data.observations || []);
+      setWishlist(data.wishlist || []);
     }
   }, []);
 
